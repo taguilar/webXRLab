@@ -20,6 +20,7 @@
     let mesh;
 
 		init();
+		buildModel();
 		animate();
 
 		function init() {
@@ -34,24 +35,15 @@
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 			renderer.xr.enabled = true; 
+			renderer.setAnimationLoop(render);
 			container.appendChild(renderer.domElement);
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-			const material = new THREE.MeshPhongMaterial({
-				color      :  new THREE.Color("rgb(0,0,213)"),
-				shininess  :  6,
-				flatShading:  true,
-				transparent: 1,
-				opacity    : 0.8
-			});
-      
-      mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, -0.5);
-      scene.add(mesh);
+			// Posicionar la cámara para ver el planeta
+			camera.position.z = 5;
 
 			document.body.appendChild(VRButton.createButton(renderer));
 
@@ -64,9 +56,29 @@
 
 			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
+		
+		function buildModel() {
+			// Cargar la textura de la Tierra
+			const textureLoader = new THREE.TextureLoader();
+			const earthTexture = textureLoader.load('textures/earth.jpg');
 
-		function animate() {
-			renderer.setAnimationLoop(render);
+			// Crear la geometría de la esfera (Tierra)
+			const geometry = new THREE.SphereGeometry(1, 32, 32);
+
+			// Crear el material y aplicarle la textura de la Tierra
+			const material = new THREE.MeshPhongMaterial({
+			  map: earthTexture
+			});
+
+			// Crear la malla combinando la geometría y el material
+			const earth = new THREE.Mesh(geometry, material);
+			scene.add(earth);
+		}	 
+
+		function animate() {			
+			
+		  // Añadir rotación a la Tierra
+		  earth.rotation.y += 0.005;
 		}
 
 		function render() {      
