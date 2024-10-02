@@ -14,7 +14,6 @@
 	<script type="module">
     // To start an AR scene with webXR, we can use a handy button provided by three.js
     // We first have to import it because it is a javascript module
-    import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 	import { VRButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/VRButton.js';
     
 		let camera, scene, renderer;
@@ -54,7 +53,6 @@
       mesh.position.set(0, 0, -0.5);
       scene.add(mesh);
 
-			document.body.appendChild(ARButton.createButton(renderer));
 			document.body.appendChild(VRButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
