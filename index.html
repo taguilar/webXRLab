@@ -15,6 +15,7 @@
     // To start an AR scene with webXR, we can use a handy button provided by three.js
     // We first have to import it because it is a javascript module
     import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
+	import { VRButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/VRButton.js';
     
 		let camera, scene, renderer;
     let mesh;
@@ -33,29 +34,28 @@
 			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
-      // This next line is important to to enable the renderer for WebXR
-			renderer.xr.enabled = true; // New!
+			renderer.xr.enabled = true; 
 			container.appendChild(renderer.domElement);
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
 
-      const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-      const material = new THREE.MeshPhongMaterial({
-        color      :  new THREE.Color("rgb(226,35,213)"),
-        shininess  :  6,
-        flatShading:  true,
-        transparent: 1,
-        opacity    : 0.8
-      });
+			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+			const material = new THREE.MeshPhongMaterial({
+				color      :  new THREE.Color("rgb(0,0,213)"),
+				shininess  :  6,
+				flatShading:  true,
+				transparent: 1,
+				opacity    : 0.8
+			});
       
       mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(0, 0, -0.5);
       scene.add(mesh);
 
-			// Add the AR button to the body of the DOM
 			document.body.appendChild(ARButton.createButton(renderer));
+			document.body.appendChild(VRButton.createButton(renderer));
 
 			window.addEventListener('resize', onWindowResize, false);
 		}
