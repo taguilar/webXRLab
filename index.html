@@ -21,7 +21,7 @@
     let mesh;
 
 	// objects
-	let earth;
+	let earth, milkyWay;
 
 	init();
 	buildModel();
@@ -98,8 +98,8 @@
 		});
 
 		// Crear la esfera de la Vía Láctea
-		milkyWaySphere = new THREE.Mesh(milkyWayGeometry, milkyWayMaterial);
-		scene.add(milkyWaySphere);
+		milkyWay = new THREE.Mesh(milkyWayGeometry, milkyWayMaterial);
+		scene.add(milkyWay);
 	}	
 
 	function animate() {			
