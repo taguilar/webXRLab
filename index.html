@@ -61,10 +61,8 @@
 	}
 	
 	function buildModel() {
-		earth=createEarth();
-		
-		scene.add(earth);
-		scene.add(createMilkyWay());
+		createEarth();
+		createMilkyWay()		
 	}	 
 	
 	function createEarth() {
@@ -81,7 +79,8 @@
 		});
 
 		// Crear la malla combinando la geometría y el material
-		return new THREE.Mesh(geometry, material);		
+		earth=new THREE.Mesh(geometry, material);		
+		scene.add(earth);
 	}
 	
 	function createMilkyWay() {
