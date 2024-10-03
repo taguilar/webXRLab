@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<meta name="author" content="WebXR Academy">
 	<link type="text/css" rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -16,74 +16,78 @@
     // We first have to import it because it is a javascript module
 	import { VRButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/VRButton.js';
     
-		let camera, scene, renderer;
+	// basic infraestructure
+	let camera, scene, renderer;
     let mesh;
 
-		init();
-		buildModel();
-		animate();
+	// objects
+	let earth;
 
-		function init() {
-			const container = document.createElement('div');
-			document.body.appendChild(container);
+	init();
+	buildModel();
+	animate();
 
-			scene = new THREE.Scene();
+	function init() {
+		const container = document.createElement('div');
+		document.body.appendChild(container);
 
-			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+		scene = new THREE.Scene();
 
-			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.xr.enabled = true; 
-			renderer.setAnimationLoop(render);
-			container.appendChild(renderer.domElement);
+		camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
-			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-			light.position.set(0.5, 1, 0.25);
-			scene.add(light);
+		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+		renderer.setPixelRatio(window.devicePixelRatio);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		renderer.xr.enabled = true; 
+		renderer.setAnimationLoop(render);
+		container.appendChild(renderer.domElement);
 
-			// Posicionar la cámara para ver el planeta
-			camera.position.z = 5;
+		var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+		light.position.set(0.5, 1, 0.25);
+		scene.add(light);
 
-			document.body.appendChild(VRButton.createButton(renderer));
+		// Posicionar la cámara para ver el planeta
+		camera.position.z = 5;
 
-			window.addEventListener('resize', onWindowResize, false);
-		}
+		document.body.appendChild(VRButton.createButton(renderer));
 
-		function onWindowResize() {
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+		window.addEventListener('resize', onWindowResize, false);
+	}
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
+	function onWindowResize() {
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
+		renderer.setSize(window.innerWidth, window.innerHeight);
+	}
+	
+	function buildModel() {
+		// Cargar la textura de la Tierra
+		const textureLoader = new THREE.TextureLoader();
+		const earthTexture = textureLoader.load('textures/earth.jpg');
+
+		// Crear la geometría de la esfera (Tierra)
+		const geometry = new THREE.SphereGeometry(1, 32, 32);
+
+		// Crear el material y aplicarle la textura de la Tierra
+		const material = new THREE.MeshPhongMaterial({
+		  map: earthTexture
+		});
+
+		// Crear la malla combinando la geometría y el material
+		earth = new THREE.Mesh(geometry, material);
+		scene.add(earth);
+	}	 
+
+	function animate() {			
 		
-		function buildModel() {
-			// Cargar la textura de la Tierra
-			const textureLoader = new THREE.TextureLoader();
-			const earthTexture = textureLoader.load('textures/earth.jpg');
+	  // Añadir rotación a la Tierra
+	  earth.rotation.y += 0.005;
+	}
 
-			// Crear la geometría de la esfera (Tierra)
-			const geometry = new THREE.SphereGeometry(1, 32, 32);
-
-			// Crear el material y aplicarle la textura de la Tierra
-			const material = new THREE.MeshPhongMaterial({
-			  map: earthTexture
-			});
-
-			// Crear la malla combinando la geometría y el material
-			const earth = new THREE.Mesh(geometry, material);
-			scene.add(earth);
-		}	 
-
-		function animate() {			
-			
-		  // Añadir rotación a la Tierra
-		  earth.rotation.y += 0.005;
-		}
-
-		function render() {      
-			renderer.render(scene, camera);
-		}
+	function render() {      
+		renderer.render(scene, camera);
+	}
 
 	</script>
 </body>
