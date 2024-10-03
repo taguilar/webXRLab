@@ -67,8 +67,8 @@
 	function createSun() {
 		const textureLoader = new THREE.TextureLoader();
 		const texture = textureLoader.load('textures/sun.jpg');
-		const geometry = new THREE.SphereGeometry(1, 32, 32);
-		const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+		const geometry = new THREE.SphereGeometry(10, 32, 32);
+		const material = new THREE.MeshBasicMaterial({ color: 0xfff047 });
 		sun=new THREE.Mesh(geometry, material);
 		sun.position.set(0,0,0);
 		scene.add(sun);		
@@ -96,6 +96,9 @@
 		
 		// Traslación de la Tierra
 		earthOrbit.rotation.y += 0.0002739;
+	  
+	    // movimiento de camara
+		camera.position.z += 0.01;
 	  
 		render(); // Renderizar la escena en cada frame		
 	}
