@@ -22,6 +22,7 @@
 
 	// objects
 	let earth, sun;
+	let earthOrbit;
 
 	init();
 	buildModel();
@@ -34,6 +35,7 @@
 		scene = new THREE.Scene();
 
 		camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+		camera.position.z = 30;
 
 		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		renderer.setPixelRatio(window.devicePixelRatio);
@@ -41,12 +43,9 @@
 		renderer.xr.enabled = true; 		
 		container.appendChild(renderer.domElement);
 
-		var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+		var light = new THREE.PointLight(0xffffff, 2, 100);
 		light.position.set(0.5, 1, 0.25);
 		scene.add(light);
-
-		// Posicionar la cámara para ver el planeta
-		camera.position.z = 5;
 
 		document.body.appendChild(VRButton.createButton(renderer));
 
@@ -61,11 +60,22 @@
 	}
 	
 	function buildModel() {
+		createSun();
 		createEarth();
-		createMilkyWay()		
 	}	 
 	
+	function createSun() {
+		const geometry = new THREE.SphereGeometry(3, 32, 32);
+		const material = new THREE.MeshBasicMaterial({color: 0x101000});
+		sun=new THREE.Mesh(geometry, material);		
+		sun.position.set(0,0,0); // center
+		scene.add(sun);
+	}	
+
 	function createEarth() {
+		earthOrbit = new THREE.Group();
+		scene.add(earthOrbit);
+
 		const textureLoader = new THREE.TextureLoader();
 		const earthTexture = textureLoader.load('textures/earth.jpg');
 		const geometry = new THREE.SphereGeometry(1, 32, 32);
@@ -73,24 +83,22 @@
 		  map: earthTexture
 		});
 		earth=new THREE.Mesh(geometry, material);
-		earth.position.x = 10;
-		scene.add(earth);
+		earth.position.set(10,0,0);
+		
+		earthOrbit.add(earth);		
 	}
-	
-	function createSun() {
-		const geometry = new THREE.SphereGeometry(3, 32, 32);
-		const material = new THREE.MeshBasicMaterial({color: 0x101000});
-		Sun=new THREE.Mesh(geometry, material);		
-		Sun.position.x = 20;
-		scene.add(Sun);
-	}	
 
 	function animate() {			
-		// Añadir rotación a la Tierra
+		// animación continua
+		requestAnimationFrame(animate); 
+
+		// Rotación a la Tierra
 		earth.rotation.y += 0.005;
+		
+		// Traslación de la Tierra
+		earthOrbit.rotation.y += 0.01;
 	  
-		requestAnimationFrame(animate); // Asegura que la animación sea continua
-		render(); // Renderizar la escena en cada frame
+		render(); // Renderizar la escena en cada frame		
 	}
 
 	function render() {      
