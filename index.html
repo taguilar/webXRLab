@@ -21,7 +21,7 @@
     let mesh;
 
 	// objects
-	let earth, milkyWay;
+	let earth, sun;
 
 	init();
 	buildModel();
@@ -66,40 +66,23 @@
 	}	 
 	
 	function createEarth() {
-		// Cargar la textura de la Tierra
 		const textureLoader = new THREE.TextureLoader();
 		const earthTexture = textureLoader.load('textures/earth.jpg');
-
-		// Crear la geometría de la esfera (Tierra)
 		const geometry = new THREE.SphereGeometry(1, 32, 32);
-
-		// Crear el material y aplicarle la textura de la Tierra
 		const material = new THREE.MeshPhongMaterial({
 		  map: earthTexture
 		});
-
-		// Crear la malla combinando la geometría y el material
-		earth=new THREE.Mesh(geometry, material);		
+		earth=new THREE.Mesh(geometry, material);
+		earth.position.x = 10;
 		scene.add(earth);
 	}
 	
-	function createMilkyWay() {
-		// Cargar la textura de la Vía Láctea
-		const textureLoader = new THREE.TextureLoader();
-		const milkyWayTexture = textureLoader.load('textures/milkyway.jpg'); // Asegúrate de tener esta imagen
-
-		// Crear una esfera enorme que envolverá la escena (en el lado interno)
-		const milkyWayGeometry = new THREE.SphereGeometry(1000, 64, 64); 
-
-		// Material para que no se vea afectado por la luz y con la textura en el lado interior
-		const milkyWayMaterial = new THREE.MeshBasicMaterial({
-			map: milkyWayTexture,
-			side: THREE.BackSide // Renderiza el lado interno de la esfera
-		});
-
-		// Crear la esfera de la Vía Láctea
-		milkyWay = new THREE.Mesh(milkyWayGeometry, milkyWayMaterial);
-		scene.add(milkyWay);
+	function createSun() {
+		const geometry = new THREE.SphereGeometry(3, 32, 32);
+		const material = new THREE.MeshBasicMaterial({color: 0x101000});
+		Sun=new THREE.Mesh(geometry, material);		
+		Sun.position.x = 20;
+		scene.add(Sun);
 	}	
 
 	function animate() {			
