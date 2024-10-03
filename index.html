@@ -38,8 +38,7 @@
 		renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		renderer.setPixelRatio(window.devicePixelRatio);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		renderer.xr.enabled = true; 
-		renderer.setAnimationLoop(render);
+		renderer.xr.enabled = true; 		
 		container.appendChild(renderer.domElement);
 
 		var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -80,9 +79,11 @@
 	}	 
 
 	function animate() {			
-		
-	  // Añadir rotación a la Tierra
-	  earth.rotation.y += 0.005;
+		// Añadir rotación a la Tierra
+		earth.rotation.y += 0.005;
+	  
+		requestAnimationFrame(animate); // Asegura que la animación sea continua
+		render(); // Renderizar la escena en cada frame
 	}
 
 	function render() {      
